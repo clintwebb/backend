@@ -56,10 +56,14 @@ flowchart TD;
     FUNC_CREATE_CHAIN --> FUNC_CREATE_BLOCK
 
     %% When a user is creating an account for the service, need to then setup some chains and blocks.
-    FUNC_CREATE_ACCT --> TARGET
+    FUNC_CREATE_ACCT
     FUNC_CREATE_CHAIN --> FUNC_CREATE_ACCT
 
-    FRONT_
+    FRONT_CREATE_ACCOUNT
+    FUNC_CREATE_ACCT --> FRONT_CREATE_ACCOUNT
+
+    FRONT_LOGIN  --> TARGET
+    FRONT_CREATE_ACCOUNT --> FRONT_LOGIN
 
     TARGET[["`**Initial Functioning Website**`"]]
     style TARGET fill:#faf
