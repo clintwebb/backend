@@ -2,8 +2,21 @@
 A backend service that can present anything without any custom functionality required.
 Data is stored securely in the back-end, but processing of that data is all done at the front-end.
 
-
 ## General Purpose
+The general purpose is to provide information or tools for people to access and use, along with storing some information which is really only related to them.
+
+### An example
+Someone wants to create a website which allows people to do some calculations.   Lets imagine it is something to do with house repairs.
+They present a static website which has all the html/css/javascript etc in it.   
+When people want to use the website, and they are putting in information on it, the browser side talks to the backend and creates an encrypted chunk of data to keep the information.  
+The key for encryption is stored in the users browser.  Additionally, could also set it so the user can create an account with a password, etc, and the key is stored on the backend (but requires login to access the key).  
+The main purpose, when that person closes the browser, and then later on goes back to this website, it pulls the information they previously stored from the backend and re-presents it back to them.
+
+It can be done at a very small level, or at a very large level.   
+
+### Another example
+This is the real example, of the main reason for wanting to do this backend.   Want to create a website to handle a mini budget.  Almost all the data stored only applies to the user, not needing to be stored in a complicated database or accessing a bunch of shared info.
+
 
 ## Layers
 
