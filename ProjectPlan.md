@@ -20,6 +20,7 @@ flowchart TD;
 
     %% Active (#aaf)
     style LEARN_RUST fill:#aaf
+    style LEARN_RUST_WEB fill:#aaf
 
     %%--------------
 
