@@ -39,10 +39,12 @@ flowchart TD;
     %% Want to be able to present static content.   Originally from direct file content (often deployed).  Eventually would want to also be able to present static content from a Block.
     LEARN_RUST_WEB_STATIC([Present Static Content])
     LEARN_RUST_WEB --> LEARN_RUST_WEB_STATIC
+    LEARN_RUST_WEB_CERTS --> LEARN_RUST_WEB_STATIC 
     
     %% There may be cases where we want to run something dynamically on the endpoint.
     LEARN_RUST_WEB_DYNAMIC([Present scripted content])
     LEARN_RUST_WEB --> LEARN_RUST_WEB_DYNAMIC
+    LEARN_RUST_WEB_CERTS --> LEARN_RUST_WEB_DYNAMIC
     
     %% When people are using the backend, need to plan how we are expecting it to be first setup.
     PLAN_BACKEND_INSTALL[Plan for Install]
