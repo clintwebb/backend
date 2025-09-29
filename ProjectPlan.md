@@ -72,11 +72,12 @@ flowchart TD;
     FUNC_CREATE_ACCT
     FUNC_CREATE_CHAIN --> FUNC_CREATE_ACCT
 
-    %% 
+    %% We want a Javascript static file that can be provided to consumers which will easily interact with backend.
     FRONT_API_JS
     
     FRONT_CREATE_ACCOUNT
     FUNC_CREATE_ACCT --> FRONT_CREATE_ACCOUNT
+    FRONT_API_JS     --> FRONT_CREATE_ACCOUNT
 
     FRONT_LOGIN  --> TARGET
     FRONT_CREATE_ACCOUNT --> FRONT_LOGIN
