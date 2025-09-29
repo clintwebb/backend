@@ -7,15 +7,35 @@ The general purpose is to provide information or tools for people to access and 
 
 ### An example
 Someone wants to create a website which allows people to do some calculations.   Lets imagine it is something to do with house repairs.
-They present a static website which has all the html/css/javascript etc in it.   
-When people want to use the website, and they are putting in information on it, the browser side talks to the backend and creates an encrypted chunk of data to keep the information.  
-The key for encryption is stored in the users browser.  Additionally, could also set it so the user can create an account with a password, etc, and the key is stored on the backend (but requires login to access the key).  
+They present a static website which has all the html/css/javascript etc in it.
+When people want to use the website, and they are putting in information on it, the browser side talks to the backend and creates an encrypted chunk of data to keep the information.
+The key for encryption is stored in the users browser.  Additionally, could also set it so the user can create an account with a password, etc, and the key is stored on the backend (but requires login to access the key).
 The main purpose, when that person closes the browser, and then later on goes back to this website, it pulls the information they previously stored from the backend and re-presents it back to them.
 
-It can be done at a very small level, or at a very large level.   
+It can be done at a very small level, or at a very large level.
 
 ### Another example
 This is the real example, of the main reason for wanting to do this backend.   Want to create a website to handle a mini budget.  Almost all the data stored only applies to the user, not needing to be stored in a complicated database or accessing a bunch of shared info.
+
+#### And the real implmentation of such an example.
+ 
+ 1. The backend service is installed on a 'server', and it will be configured with the server DNS names, and potentially certificates and so on.
+ 1. The front-end website development will be created, and can be stored in a different git repository, or even just pointing to a file storage location.  Multiple options.
+ 1. The scripting on the front-end will include some modules or components which can talk to the backend.
+ 1. For the site, new users would create an account, so that all handled on the front-end scripting, but on the backend it also barely included.  New accounts will be encrypted and a chain created.. that account can then access that chain.  The chain is really just a chain of blocks of data.  The backend will not know at all what information is in the block of data.  It will just provide it when requested.
+ 1. The block of data is encrypted with a key that was created in the browser and stored in the browser.  But for safety of accessing it from multiple browsers, the key can be password protected and stored in the backed, but requires some way of verifying the requestor before providing it.  This would normally be like a username/password or some other more modern authentication.
+ 1. The backend just provides blocks that are requested.  The front-end can extract the data out of the block using the keys that it has.
+ 1. The front-end can also create more chains of data.  Normally for different kinds of information.
+ 1. So in this example, when a new user starts to use the mini-budget website, and create an account, on their browser it creates the private key, requests a block with an identifier that it can determine from the account name, or whatever the front-end chooses.  That block can then store data that references any other blocks.
+ 1. The data being stored (and encrypted before it even provided to the backend), can be in any format required by the front-end.  Typically (and supported) is JSON formatted info that can then be processed and accessed easily. The info in that data received is normally what is useful to then reference other data chunks needed.
+ 
+
+# Data types.
+ 1. Zones - this will likely be renamed to something else, but will often be associated with isolating different services or products.  The idea is that data that is related to a specific thing will be completely isolated (at the backend).
+ 1. Chunks - this is a single chunk of data that is referenced by a key.
+ 1. Chain - This is a series of chunks of data that are basically a chain of data.  Similar to a set of records.  When some data is saved, it is added to the end of chain.  This is mostly for historical or recorded information. Chunks can be used individually to do a similar thing, but the main purpose of the chains, is that the backend will know the different chunks, and can provide multiple of them in a request.  Eg, the front-end says, send me the last 20 chunks in the chain all in one go (to reduce the bandwidth and delay)... or could ask for the first 20 chunks... etc.    If not done in the chain, the front end can have a single chunk, which then referenes the next chunk, which references the next and so on... but each chunk would then require an extra request, which can then result in delays and complication.  The only thing different in the backend side, is that each stored chunk also includes a reference to the one before and/or after it.   To make it simple, in most cases... a new chunk is added to the chain, and the backend then stores and caches the chain list.
+
+ 
 
 
 ## Layers
@@ -43,7 +63,7 @@ For the website, a lot of information will be specific to the account, but often
 
 
 ## Co-ordination between backend interfaces and storage.
-When requests are received, they are processed on the interface, and it needs to retrieve the requested data.  If it is cached, will access it there, but if not cached, then it will need to talk to the storage asking for it.   When initialised, the backend will create a network connection to the backend, and will queue requests through it.   Normally, the number of backends available, will be useful in determining which backend to send the request to.   If there are 3 backends, each block will be stored on one of them, and backed up on another.  When a query is made, it will know which is the primary by using a modulus.   Each block is referenced by a number (based on a hash), a modulus of that number based on the number of backends will indicate which one is the primary.
+When requests are received, they are processed on the interface and it needs to retrieve the requested data.  If it is cached, will access it there, but if not cached, then it will need to talk to the storage asking for it.   When initialised, the backend will create a network connection to the other backends, and will queue requests through it.   Normally, the number of backends available, will be useful in determining which backend to send the request to.   If there are 3 backends, each block will be stored on one of them, and backed up on another.  When a query is made, it will know which is the primary by using a modulus.   Each block is referenced by a number (based on a hash), a modulus of that number based on the number of backends will indicate which one is the primary.
 
 
 
@@ -51,7 +71,7 @@ When requests are received, they are processed on the interface, and it needs to
 If we had 3 storage services, and 1 is dropped.  A recovery needs to be in place where the data is re-synced.  It will be in a temporary state where it will continue to process as much as it can as normal, but will re-arrange the structure with the other nodes to get it all re-aligned.  Eg, if a server dies, and the backup one now needs to know it is the primary, and another node needs to obtain the backup copy... it all needs to re-sync.
 
 
-## Real World Examples
+## Real World Examples (of Scalability)
 
 For example, could start with a single server which hosts the front-end (which presents the web-page external content), and the accounts and data are stored as secure blocks in the backend, and then later when more clients are using the service, they decide to spread it over two servers.  Depending on the requirements, could be set so that the data is spread over both servers and synchronised...  but frontend and backend both in the two servers.
 

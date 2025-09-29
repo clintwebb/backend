@@ -29,22 +29,30 @@ flowchart TD;
     LEARN_RUST([Learn Rust language])
     
     %% After learning the general Rust language, need to learn how to use it to present a website
+    LEARN_RUST --> 
     LEARN_RUST_WEB([Learn how to Present Website])
-    LEARN_RUST --> LEARN_RUST_WEB
     
     %% When presenting a website, need to be able to secure it.  Would be good to be able to do that directly in our app, rather than relying on a proxy in-front
     LEARN_RUST_WEB_CERTS([Present Secure Website])
     LEARN_RUST_WEB --> LEARN_RUST_WEB_CERTS
     
-    %% Want to be able to present static content.   Originally from direct file content (often deployed).  Eventually would want to also be able to present static content from a Block.
+    %% Want to be able to present static content.   Originally from direct file content (often deployed).  
+    %% Eventually would want to also be able to present static content from a Block.
     LEARN_RUST_WEB_STATIC([Present Static Content])
-    LEARN_RUST_WEB --> LEARN_RUST_WEB_STATIC
+    LEARN_RUST_WEB       --> LEARN_RUST_WEB_STATIC
     LEARN_RUST_WEB_CERTS --> LEARN_RUST_WEB_STATIC 
     
     %% There may be cases where we want to run something dynamically on the endpoint.
     LEARN_RUST_WEB_DYNAMIC([Present scripted content])
-    LEARN_RUST_WEB --> LEARN_RUST_WEB_DYNAMIC
+    LEARN_RUST_WEB       --> LEARN_RUST_WEB_DYNAMIC
     LEARN_RUST_WEB_CERTS --> LEARN_RUST_WEB_DYNAMIC
+
+    LEARN_RUST --> 
+    LEARN_RUST_FILE_STORAGE([Store data in file storage])
+    
+    LEARN_RUST --> 
+    LEARN_RUST_ENCRYPTION([Encrypt data stored])
+    
     
     %% When people are using the backend, need to plan how we are expecting it to be first setup.
     PLAN_BACKEND_INSTALL[Plan for Install]
@@ -53,20 +61,27 @@ flowchart TD;
 
     %% The backend will be able to gather information for the front-end, but wont actually know the content of it.   Each chain can have read-only access potentially, but a seperate key will be needed to modify (add to) the chain.
     FUNC_CREATE_CHAIN
-    LEARN_RUST_WEB --> FUNC_CREATE_CHAIN
+    LEARN_RUST_WEB        --> FUNC_CREATE_CHAIN
+    LEARN_RUST_ENCRYPTION --> FUNC_CREATE_CHAIN
 
     FUNC_CREATE_BLOCK
     FUNC_CREATE_CHAIN --> FUNC_CREATE_BLOCK
+    LEARN_RUST_ENCRYPTION --> FUNC_CREATE_BLOCK
 
     %% When a user is creating an account for the service, need to then setup some chains and blocks.
     FUNC_CREATE_ACCT
     FUNC_CREATE_CHAIN --> FUNC_CREATE_ACCT
 
+    %% 
+    FRONT_API_JS
+    
     FRONT_CREATE_ACCOUNT
     FUNC_CREATE_ACCT --> FRONT_CREATE_ACCOUNT
 
     FRONT_LOGIN  --> TARGET
     FRONT_CREATE_ACCOUNT --> FRONT_LOGIN
+    
+
 
     TARGET[["`**Initial Functioning Website**`"]]
     style TARGET fill:#faf
